@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .widget-wrapper {
+        position: absolute;
+        left: 50%;
+        height: max-content;
+        transform: translate(-50%);
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background-color: #fff;
+        border: 3px solid #6758ff;
+      }
+      .content-wrapper {
+        display: inline-flex;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        margin-bottom: 15px;
+        gap: 20px;
+      }
+      .contents {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        height: 60%;
+      }
+      .quiz,
+      .answer {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .quiz-title,
+      .answer-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #27262e;
+      }
+      .quiz-input,
+      .answer-input {
+        display: inline-flex;
+        width: 100%;
+      }
+      .control {
+        display: flex;
+        justify-content: space-between;
+        height: 20%;
+        align-items: center;
+      }
+      .submit {
+        background-color: rgb(217, 214, 255);
+        color: white;
+        width: 100%;
+        height: 36px;
+        font-weight: 600;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="widget-wrapper">
+      <div class="content-wrapper">
+        <div class="contents">
+          <div class="quiz">
+            <div class="quiz-title">
+              <span class="quiz-title">문제</span>
+              <span class="num"></span>
+            </div>
+            <div class="quiz-input">
+              <input
+                id="quiz"
+                name="quiz"
+                type="text"
+                placeholder="문제를 입력해 주세요 "
+                style="background-color: white; padding: 10px 5px; color: black"
+              />
+            </div>
+          </div>
+          <div class="answer">
+            <div class="answer-title">
+              <span class="answer-title">정답</span>
+              <span class="num"></span>
+            </div>
+            <div class="answer-input">
+              <input
+                id="answer"
+                name="quiz"
+                type="text"
+                placeholder="정답을 입력해 주세요 "
+                style="background-color: white; padding: 10px 5px; color: black"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="control">
+          <button class="submit">문제 내기</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let quizInput = document.querySelector("#quiz");
+      let answerInput = document.querySelector("#answer");
+      let submitButton = document.querySelector(".submit");
+
+      function checkField() {
+        let qText = quizInput.value;
+        let aText = answerInput.value;
+        if (qText.trim() === "" || aText.trim() === "") {
+          // 입력되지 않은 필드가 있으므로 알림 메시지를 표시하고 퀴즈 제출을 취소
+          submitButton.disabled = true;
+          return;
+        } else {
+          submitButton.style.backgroundColor = "#6758ff";
+          submitButton.disabled = false;
+        }
+      }
+      checkField();
+      quizInput.addEventListener("input", checkField);
+      answerInput.addEventListener("input", checkField);
+
+      // 초기 상태에서 버튼을 비활성화
+      submitButton.addEventListener("click", function () {
+        // 문제와 정답 입력 필드에서 값을 가져오기
+        let qText = quizInput.value;
+        let aText = answerInput.value;
+
+        // 앱으로 문제와 정답 데이터를 전송하기 위한 메시지 생성
+        var message = {
+          type: "submit_quiz",
+          quiz: qText,
+          answer: aText,
+        };
+
+        // 메시지를 부모 창(앱)으로 전송
+        window.parent.postMessage(message, "*");
+      });
+    </script>
+  </body>
+</html>
