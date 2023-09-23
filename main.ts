@@ -93,7 +93,6 @@ function initApp() {
 
 function readyApp(player) {
   _answerCount += player
-  ScriptApp.showCenterLabel(`${_answerCount}${player}`);
   if(_answerCount === _players.length){
     for(let i=0; i<_players.length; i++){
       _players[i].moveSpeed = 0;
@@ -218,11 +217,11 @@ ScriptApp.onTriggerObject.Add(function(player, layer, x, y){
 
 ScriptApp.addOnKeyDown(81, function(player) {
   if(_seeker === player) return;
-  if(transformCount < 5){
+  if(transformCount < 11){
     const index = Math.floor(Math.random() * objectList.length);
     player.sprite = objectList[index];
     player.sendUpdated();
-    transformCount++
+    transformCount++;
   }
 });
 
